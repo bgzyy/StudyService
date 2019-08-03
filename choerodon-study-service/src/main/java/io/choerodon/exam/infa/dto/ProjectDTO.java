@@ -1,0 +1,75 @@
+package io.choerodon.exam.infa.dto;
+
+import io.choerodon.mybatis.entity.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.List;
+
+/**
+ * Created by zhao'yin
+ * Date 2019/8/3.
+ */
+@Table(name = "fd_project")
+@ToString
+@Data
+@NoArgsConstructor
+public class ProjectDTO extends BaseDTO {
+
+    private static final String CODE_REGULAR_EXPRESSION =
+            "^[a-z](([a-z0-9]|-(?!-))*[a-z0-9])*$";
+
+    public static final String PROJECT_NAME_REG = "^[-—\\.\\w\\s\\u4e00-\\u9fa5]{1,32}$";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键ID/非必填")
+    private Long id;
+
+    @ApiModelProperty(value = "项目名/必填")
+    @NotEmpty(message = "error.project.name.empty")
+    @Size(min = 1, max = 32, message = "error.project.code.size")
+    @Pattern(regexp = PROJECT_NAME_REG, message = "error.project.name.regex")
+    private String name;
+
+    @ApiModelProperty(value = "项目编码/必填")
+    @NotEmpty(message = "error.project.code.empty")
+    @Size(min = 1, max = 14, message = "error.project.code.size")
+    @Pattern(regexp = CODE_REGULAR_EXPRESSION, message = "error.project.code.illegal")
+    private String code;
+
+    @ApiParam(name = "organization_id", value = "组织id")
+    @ApiModelProperty(value = "组织ID/非必填")
+    private Long organizationId;
+
+    @ApiModelProperty(value = "项目图标url")
+    private String imageUrl;
+
+    @ApiModelProperty(value = "是否启用/非必填")
+    @Column(name = "is_enabled")
+    private Boolean enabled;
+
+    @ApiModelProperty(value = "项目类型code/非必填")
+    private String type;
+    @ApiModelProperty(value = "项目类型（遗留旧字段，一对一）:AGILE(敏捷项目),PROGRAM(普通项目组),ANALYTICAL(分析型项目群)")
+    private String category;
+
+    @ApiModelProperty(value = "项目类型(非开源，一对多)")
+    private List<String> categories;
+
+    @Transient
+    private List<ProjectDTO> projects;
+
+    @Transient
+    @ApiModelProperty(value = "项目类型名称/非必填")
+    private String typeName;
+    @Transient
+    private String organizationName;
+}

@@ -1,0 +1,27 @@
+eureka:
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 30
+    metadata-map:
+      VERSION: v1
+  client:
+    registryFetchIntervalSeconds: 10
+    service-url:
+      defaultZone: http://register-server.pveruntimedev.svc.cluster.local:8000/eureka
+    #      defaultZone: http://localhost:8000/eureka/
+    register-with-eureka: true
+mybatis:
+  #  mapperLocations: classpath:task/mapper/*.xml
+  mapperLocations: classpath:task.mapper/*.xml
+  mapUnderscoreToCamelCase: true # 数据库下划线转驼峰配置
+  configuration:
+#    配置打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-81ec6c.pveruntimedev.svc.cluster.local/study_service_24484_zyy?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    url: jdbc:mysql://192.168.145.100/choerodon_study_service_24484_zyy?useUnicode=true&characterEncoding=utf-8&useSSL=false&useInformationSchema=true&remarks=true
+    username: root
+    password: root
